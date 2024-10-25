@@ -111,30 +111,39 @@ class Board(object):
         offset_x = grid_x - 1
         if self.board[grid_y][offset_x]:
             block_color = self.board[grid_y][offset_x].sprite
-            # self.board[grid_y][grid_x - 1].sprite = MARKER_SPRITE
-            cnt = self.grid_search(offset_x, grid_y, block_color)
-            print("FOUND:", cnt)
+            self.grid_search(
+                offset_x,
+                grid_y,
+                block_color,
+            )
+            # self.shift_blocks_down()
 
-    def grid_search(self, x: int, y: int, block_color: Pt) -> int:
+    def grid_search(self, x: int, y: int, block_color: Pt):
         cur_block = self.board[y][x]
         if (
             not cur_block
-            or cur_block.sprite == FOUND_SPRITE
             or cur_block.sprite != block_color
             or x < 0
             or x > BOARD_WIDTH - 1
             or y < 0
             or y > BOARD_HEIGHT - 1
         ):
-            return 0
+            return
 
-        found = 0
-        self.board[y][x].sprite = FOUND_SPRITE
-        found += self.grid_search(x + 1, y, block_color)
-        found += self.grid_search(x - 1, y, block_color)
-        found += self.grid_search(x, y + 1, block_color)
-        found += self.grid_search(x, y - 1, block_color)
-        return found
+        self.board[y][x] = False
+        self.grid_search(x + 1, y, block_color)
+        self.grid_search(x - 1, y, block_color)
+        self.grid_search(x, y + 1, block_color)
+        self.grid_search(x, y - 1, block_color)
+
+    # def shift_blocks_down(self):
+    #     """Move all blocks down to fill empty space"""
+    #     for x in range(BOARD_WIDTH - 1):
+    #         for y in range(BOARD_HEIGHT, 0, -1):
+    #             if not self.board[y][x]:
+    #                 print(y, x, self.board[y][x], self.board[y - 1][x])
+    #                 self.board[y][x] = self.board[y - 1][x]
+    #                 self.board[y - 1][x] = False
 
     def gen_next_column(self):
         """Generate a new column of blocks"""
@@ -142,9 +151,9 @@ class Board(object):
             next_block_sprite = random.choice(self.block_types)
             self.board[y][BOARD_WIDTH - 1] = Tile(BOARD_WIDTH, y, next_block_sprite)
 
-        self.shift_columns()
+        self.shift_blocks_left()
 
-    def shift_columns(self):
+    def shift_blocks_left(self):
         """Shift every column forward 1 grid space"""
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH - 1):
