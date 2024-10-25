@@ -31,7 +31,7 @@ class Timer(object):
             timer_text = f"{self.cur_time}"
             self.delay = 0
         else:
-            timer_text = "ATTACK!"
+            timer_text = "PUSH!"
             if self.cur_time < self.start_time:
                 self.delay = 1
 

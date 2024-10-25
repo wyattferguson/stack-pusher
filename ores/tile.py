@@ -54,3 +54,6 @@ class Tile:
     def convert_grid_to_px(self, grid_pos: int = 0) -> int:
         """Convert grid coordinates to world pixels"""
         return (grid_pos * GRID_SIZE) + SPRITE_OFFSET
+
+    def __repr__(self) -> str:
+        return f"TILE({self.x},{self.y})"
