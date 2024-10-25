@@ -100,14 +100,9 @@ class Board(object):
         )
         px.text(x_center, y_center, text, 8)
 
-    def delete_tile(self, piece):
+    def clear_block_group(self):
+        """Delete touching blocks of same selected color"""
         pass
-
-    def remove_dead(self):
-        """Delete any dead pieces from the board"""
-        for piece in self.pieces[:]:
-            if not piece.alive:
-                self.delete_piece(piece)
 
     def gen_next_column(self):
         """Generate a new column of blocks"""
