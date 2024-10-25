@@ -33,6 +33,5 @@ class Cursor(Tile):
 
         if px.btn(px.KEY_SPACE) or px.btn(px.GAMEPAD1_BUTTON_A):
             self.selected = Pt(self.x, self.y)
-            print(self.selected)
         else:
             self.selected = False

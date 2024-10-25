@@ -8,9 +8,12 @@ from config import (
     BLOCK_YELLOW,
     BOARD_HEIGHT,
     BOARD_WIDTH,
+    FOUND_SPRITE,
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
+    MARKER_SPRITE,
+    Pt,
 )
 from cursor import Cursor
 from text import center_text_horz, center_text_vert
@@ -25,19 +28,24 @@ class Board(object):
         self.running = True
         self.game_over = False
         self.cursor = Cursor()
-        self.timer = Timer(2)
+        self.timer = Timer(5)
         self.level = level
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
+
+        for i in range(5):
+            self.gen_next_column()
 
     def update(self):
         if self.running and not self.game_over:
             self.cursor.update()
             self.timer.update()
 
+            if self.cursor.selected:
+                self.clear_block_group(self.cursor.x, self.cursor.y)
+
             if self.timer.is_action():
                 self.gen_next_column()
-                self.shift_column()
 
         self.input()
 
@@ -78,7 +86,6 @@ class Board(object):
 
         elif px.btn(px.KEY_F):
             self.gen_next_column()
-            self.shift_column()
 
     def game_over_screen(self):
         self.display_notice("GAME OVER")
@@ -88,7 +95,6 @@ class Board(object):
 
     def display_notice(self, text: str = ""):
         """Display text box in the center of the board"""
-
         x_center = center_text_horz(text)
         y_center = center_text_vert()
         px.rect(
@@ -100,9 +106,35 @@ class Board(object):
         )
         px.text(x_center, y_center, text, 8)
 
-    def clear_block_group(self):
+    def clear_block_group(self, grid_x: int = 0, grid_y: int = 0):
         """Delete touching blocks of same selected color"""
-        pass
+        offset_x = grid_x - 1
+        if self.board[grid_y][offset_x]:
+            block_color = self.board[grid_y][offset_x].sprite
+            # self.board[grid_y][grid_x - 1].sprite = MARKER_SPRITE
+            cnt = self.grid_search(offset_x, grid_y, block_color)
+            print("FOUND:", cnt)
+
+    def grid_search(self, x: int, y: int, block_color: Pt) -> int:
+        cur_block = self.board[y][x]
+        if (
+            not cur_block
+            or cur_block.sprite == FOUND_SPRITE
+            or cur_block.sprite != block_color
+            or x < 0
+            or x > BOARD_WIDTH - 1
+            or y < 0
+            or y > BOARD_HEIGHT - 1
+        ):
+            return 0
+
+        found = 0
+        self.board[y][x].sprite = FOUND_SPRITE
+        found += self.grid_search(x + 1, y, block_color)
+        found += self.grid_search(x - 1, y, block_color)
+        found += self.grid_search(x, y + 1, block_color)
+        found += self.grid_search(x, y - 1, block_color)
+        return found
 
     def gen_next_column(self):
         """Generate a new column of blocks"""
@@ -110,7 +142,10 @@ class Board(object):
             next_block_sprite = random.choice(self.block_types)
             self.board[y][BOARD_WIDTH - 1] = Tile(BOARD_WIDTH, y, next_block_sprite)
 
-    def shift_column(self):
+        self.shift_columns()
+
+    def shift_columns(self):
+        """Shift every column forward 1 grid space"""
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH - 1):
                 # End game if a block is being shifted to the end of the board

@@ -46,7 +46,7 @@ class Tile:
             self.sprite.y,
             TILE_SIZE,
             TILE_SIZE,
-            scale=GAME_SCALE,
+            # scale=GAME_SCALE,
             colkey=TRANSPARENCY,
         )
         # print(self.x, self.y, BOARD_WIDTH, BOARD_HEIGHT)
@@ -57,3 +57,6 @@ class Tile:
 
     def __repr__(self) -> str:
         return f"TILE({self.x},{self.y})"
+
+    def __eq__(self, other: object) -> bool:
+        return self.sprite == other.sprite
