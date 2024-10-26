@@ -8,11 +8,9 @@ from config import (
     BLOCK_YELLOW,
     BOARD_HEIGHT,
     BOARD_WIDTH,
-    FOUND_SPRITE,
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
-    MARKER_SPRITE,
     Pt,
 )
 from cursor import Cursor
@@ -84,6 +82,7 @@ class Board(object):
         elif px.btn(px.KEY_K):
             self.game_over = True
 
+        # trigger next wave of blocks
         elif px.btn(px.KEY_F):
             self.gen_next_column()
 
@@ -110,15 +109,20 @@ class Board(object):
         """Delete touching blocks of same selected color"""
         offset_x = grid_x - 1
         if self.board[grid_y][offset_x]:
-            block_color = self.board[grid_y][offset_x].sprite
-            self.grid_search(
+            selected_block = self.board[grid_y][offset_x]
+
+            found = self.grid_search(
                 offset_x,
                 grid_y,
-                block_color,
+                selected_block.sprite,
             )
-            # self.shift_blocks_down()
 
-    def grid_search(self, x: int, y: int, block_color: Pt):
+            if found == 1:
+                self.board[grid_y][offset_x] = selected_block
+            self.shift_blocks_down()
+
+    def grid_search(self, x: int, y: int, block_color: Pt) -> int:
+        """Recursively search around given block for matching blocks"""
         cur_block = self.board[y][x]
         if (
             not cur_block
@@ -128,22 +132,23 @@ class Board(object):
             or y < 0
             or y > BOARD_HEIGHT - 1
         ):
-            return
+            return 0
 
         self.board[y][x] = False
-        self.grid_search(x + 1, y, block_color)
-        self.grid_search(x - 1, y, block_color)
-        self.grid_search(x, y + 1, block_color)
-        self.grid_search(x, y - 1, block_color)
+        found = 1
+        found += self.grid_search(x + 1, y, block_color)
+        found += self.grid_search(x - 1, y, block_color)
+        found += self.grid_search(x, y + 1, block_color)
+        found += self.grid_search(x, y - 1, block_color)
+        return found
 
-    # def shift_blocks_down(self):
-    #     """Move all blocks down to fill empty space"""
-    #     for x in range(BOARD_WIDTH - 1):
-    #         for y in range(BOARD_HEIGHT, 0, -1):
-    #             if not self.board[y][x]:
-    #                 print(y, x, self.board[y][x], self.board[y - 1][x])
-    #                 self.board[y][x] = self.board[y - 1][x]
-    #                 self.board[y - 1][x] = False
+    def shift_blocks_down(self):
+        """Move all blocks down to fill empty space"""
+        for x in range(BOARD_WIDTH - 1):
+            for y in range(BOARD_HEIGHT):
+                # \print(y, x, self.board[y][x], self.board[y - 1][x])
+                self.board[y][x] = self.board[y + 1][x]
+                self.board[y - 1][x] = False
 
     def gen_next_column(self):
         """Generate a new column of blocks"""
