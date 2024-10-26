@@ -31,7 +31,7 @@ class Board(object):
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
 
-        for i in range(5):
+        for i in range(12):
             self.gen_next_column()
 
     def update(self):
@@ -41,9 +41,10 @@ class Board(object):
 
             if self.cursor.selected:
                 self.clear_block_group(self.cursor.x, self.cursor.y)
+                self.shift_blocks_down()
 
-            if self.timer.is_action():
-                self.gen_next_column()
+            # if self.timer.is_action():
+            #     self.gen_next_column()
 
         self.input()
 
@@ -119,7 +120,6 @@ class Board(object):
 
             if found == 1:
                 self.board[grid_y][offset_x] = selected_block
-            self.shift_blocks_down()
 
     def grid_search(self, x: int, y: int, block_color: Pt) -> int:
         """Recursively search around given block for matching blocks"""
@@ -140,15 +140,21 @@ class Board(object):
         found += self.grid_search(x - 1, y, block_color)
         found += self.grid_search(x, y + 1, block_color)
         found += self.grid_search(x, y - 1, block_color)
+
         return found
 
     def shift_blocks_down(self):
         """Move all blocks down to fill empty space"""
-        for x in range(BOARD_WIDTH - 1):
-            for y in range(BOARD_HEIGHT):
-                # \print(y, x, self.board[y][x], self.board[y - 1][x])
-                self.board[y][x] = self.board[y + 1][x]
-                self.board[y - 1][x] = False
+        # tile_moved = True
+        # print(self.board, len(self.board), len(self.board[0]))
+        # for x in range(BOARD_WIDTH - 1):
+        #     print("NEW COL", x)
+        #     for y in range(BOARD_HEIGHT, 0, -1):
+        #         print(self.board[y][x])
+        #         if not self.board[y][x]:
+        #             self.board[y][x] = self.board[y - 1][x]
+        #             self.board[y - 1][x] = False
+        pass
 
     def gen_next_column(self):
         """Generate a new column of blocks"""
