@@ -45,7 +45,7 @@ class Cursor:
             if self.x < BOARD_WIDTH - 2:
                 self.x += 1
 
-        if px.btn(px.KEY_SPACE) or px.btn(px.GAMEPAD1_BUTTON_A):
+        if px.btnr(px.KEY_SPACE) or px.btnr(px.GAMEPAD1_BUTTON_A):
             self.selected = Pt(self.x, self.y)
         else:
             self.selected = False

@@ -42,6 +42,9 @@ class Board(object):
         for i in range(3):
             self.gen_next_column()
 
+        self.board[3][3] = BLOCK_GREEN
+        self.shift_blocks_down()
+
         self.pg()
 
     def update(self):
@@ -88,7 +91,7 @@ class Board(object):
             self.game_over = True
 
         # trigger next wave of blocks
-        elif px.btn(px.KEY_F):
+        elif px.btnr(px.KEY_F):
             self.gen_next_column()
 
     def game_over_screen(self):
@@ -206,12 +209,19 @@ class Board(object):
 
     def shift_blocks_left(self):
         """Shift every column forward 1 grid space"""
+        # find furthest right empty column
+        last_empty_col = 0
+        for x in range(BOARD_WIDTH - 1, 0, -1):
+            if not self.board[BOARD_HEIGHT - 1][x]:
+                last_empty_col = x
+                break
+
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH - 1):
                 # End game if a block is being shifted to the end of the board
                 if x == 0 and self.board[y][x]:
                     self.game_over = True
                     return
-
-                self.board[y][x] = self.board[y][x + 1]
-                self.board[y][x + 1] = False
+                elif x + 1 > last_empty_col:
+                    self.board[y][x] = self.board[y][x + 1]
+                    self.board[y][x + 1] = False
