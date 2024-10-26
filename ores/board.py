@@ -1,5 +1,4 @@
 import random
-import time
 
 import pyxel as px
 from config import (
@@ -17,6 +16,7 @@ from config import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     SPRITE_OFFSET,
+    STARTING_COLS,
     TILE_SIZE,
     TRANSPARENCY,
     Pt,
@@ -39,7 +39,7 @@ class Board(object):
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
 
-        for i in range(3):
+        for i in range(STARTING_COLS):
             self.gen_next_column()
 
     def update(self):
@@ -199,10 +199,11 @@ class Board(object):
 
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH - 1):
-                # End game if a block is being shifted to the end of the board
-                if x == 0 and self.board[y][x]:
-                    self.game_over = True
-                    return
-                elif x + 1 > last_empty_col:
-                    self.board[y][x] = self.board[y][x + 1]
-                    self.board[y][x + 1] = False
+                if x + 1 > last_empty_col:
+                    # End game if a block is being shifted to the end of the board
+                    if x == 0 and self.board[y][x]:
+                        self.game_over = True
+                        return
+                    else:
+                        self.board[y][x] = self.board[y][x + 1]
+                        self.board[y][x + 1] = False
