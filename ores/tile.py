@@ -46,7 +46,7 @@ class Tile:
             self.sprite.y,
             TILE_SIZE,
             TILE_SIZE,
-            # scale=GAME_SCALE,
+            scale=GAME_SCALE,
             colkey=TRANSPARENCY,
         )
         # print(self.x, self.y, BOARD_WIDTH, BOARD_HEIGHT)

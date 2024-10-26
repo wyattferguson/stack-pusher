@@ -11,6 +11,8 @@ from config import (
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
     Pt,
 )
 from cursor import Cursor
@@ -49,17 +51,11 @@ class Board(object):
         self.input()
 
     def draw(self):
-        px.rect(
-            GRID_X_OFFSET,
-            GRID_Y_OFFSET,
-            BOARD_WIDTH * GRID_SIZE,
-            BOARD_HEIGHT * GRID_SIZE,
-            5,
-        )
+        px.bltm(0, 0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         if not self.game_over:
             # draw background tile map
-            # px.bltm(0, 0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+
             for block_row in self.board:
                 for block in block_row:
                     if block:

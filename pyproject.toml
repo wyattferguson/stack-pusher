@@ -9,8 +9,8 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pyxel = "^2.2.7"
 ruff = "^0.7.1"
+pyxel = "^2.2.7"
 
 
 [build-system]
