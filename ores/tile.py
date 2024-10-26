@@ -27,7 +27,8 @@ class Tile:
         self.animated = animated
 
     def update(self):
-        self.animate()
+        pass
+        # self.animate()
 
     def animate(self):
         """Animate sprite on delay timer"""
