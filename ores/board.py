@@ -9,17 +9,20 @@ from config import (
     BLOCK_YELLOW,
     BOARD_HEIGHT,
     BOARD_WIDTH,
-    FOUND_SPRITE,
+    GAME_SCALE,
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
+    IMAGE_SHEET,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
+    SPRITE_OFFSET,
+    TILE_SIZE,
+    TRANSPARENCY,
     Pt,
 )
 from cursor import Cursor
 from text import center_text_horz, center_text_vert
-from tile import Tile
 from timer import Timer
 
 
@@ -50,8 +53,8 @@ class Board(object):
                 self.clear_block_group(self.cursor.x, self.cursor.y)
                 self.shift_blocks_down()
 
-            # if self.timer.is_action():
-            #     self.gen_next_column()
+            if self.timer.is_action():
+                self.gen_next_column()
 
         self.input()
 
@@ -59,12 +62,14 @@ class Board(object):
         px.bltm(0, 0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         if not self.game_over:
+            # draw all board pieces
             for y in range(BOARD_HEIGHT):
                 for x in range(BOARD_WIDTH):
                     if self.board[y][x]:
-                        Tile(x, y, self.board[y][x]).draw()
+                        self.draw_tile(x, y, self.board[y][x])
 
-            self.cursor.draw()
+            # draw cursor
+            self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
             self.timer.draw()
 
             if not self.running:
@@ -155,6 +160,25 @@ class Board(object):
         for y in range(BOARD_HEIGHT):
             print(self.tboard[y])
 
+    def draw_tile(self, x: int, y: int, sprite: Pt):
+        """Draw tile sprite onto game board"""
+        px.blt(
+            self.convert_grid_to_px(x) + GRID_X_OFFSET,
+            self.convert_grid_to_px(y) + GRID_Y_OFFSET,
+            IMAGE_SHEET,
+            sprite.x,
+            sprite.y,
+            TILE_SIZE,
+            TILE_SIZE,
+            scale=GAME_SCALE,
+            colkey=TRANSPARENCY,
+        )
+        # print(self.x, self.y, BOARD_WIDTH, BOARD_HEIGHT)
+
+    def convert_grid_to_px(self, grid_pos: int = 0) -> int:
+        """Convert grid coordinates to world pixels"""
+        return (grid_pos * GRID_SIZE) + SPRITE_OFFSET
+
     def shift_blocks_down(self):
         """Move all blocks down to fill empty space"""
         for x in range(BOARD_WIDTH):
@@ -189,6 +213,5 @@ class Board(object):
                     self.game_over = True
                     return
 
-                shift_block = self.board[y][x + 1]
-                self.board[y][x] = shift_block
+                self.board[y][x] = self.board[y][x + 1]
                 self.board[y][x + 1] = False
