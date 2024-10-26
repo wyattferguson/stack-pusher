@@ -62,8 +62,7 @@ class Board(object):
             for y in range(BOARD_HEIGHT):
                 for x in range(BOARD_WIDTH):
                     if self.board[y][x]:
-                        Tile(x, y, self.board[y][x].sprite).draw()
-                        # self.board[y][x].draw()
+                        Tile(x, y, self.board[y][x]).draw()
 
             self.cursor.draw()
             self.timer.draw()
@@ -115,7 +114,7 @@ class Board(object):
             found = self.grid_search(
                 offset_x,
                 grid_y,
-                selected_block.sprite,
+                selected_block,
             )
 
             if found <= 1:
@@ -128,7 +127,7 @@ class Board(object):
         cur_block = self.board[y][x]
         if (
             not cur_block
-            or cur_block.sprite != block_color
+            or cur_block != block_color
             or x < 0
             or x > BOARD_WIDTH - 1
             or y < 0
@@ -177,8 +176,7 @@ class Board(object):
     def gen_next_column(self):
         """Generate a new column of blocks"""
         for y in range(BOARD_HEIGHT):
-            next_block_sprite = random.choice(self.block_types)
-            self.board[y][BOARD_WIDTH - 1] = Tile(BOARD_WIDTH, y, next_block_sprite)
+            self.board[y][BOARD_WIDTH - 1] = random.choice(self.block_types)
 
         self.shift_blocks_left()
 
@@ -193,6 +191,4 @@ class Board(object):
 
                 shift_block = self.board[y][x + 1]
                 self.board[y][x] = shift_block
-                if shift_block:
-                    self.board[y][x].x -= 1
                 self.board[y][x + 1] = False
