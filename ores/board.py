@@ -12,6 +12,7 @@ from config import (
     BOARD_WIDTH,
     COL_NAV,
     GAME_SCALE,
+    GOAL_SCORE,
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
@@ -33,18 +34,22 @@ from timer import Timer
 class Board(object):
     """docstring for Board."""
 
-    def __init__(self, level: int = 1):
+    def __init__(self):
         self.running = True
         self.game_over = False
         self.cursor = Cursor()
         self.score = 0
+        self.goal_score = 0
         self.timer = Timer(5)
-        self.level = level
+        self.level = 0
         self.board = []
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
-        self.new_level()
+        self.next_level()
 
-    def new_level(self):
+    def next_level(self):
+        self.level += 1
+        self.goal_score = GOAL_SCORE * self.level * 1.1
+        # self.display_notice(f"LEVEL {self.level}")
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
 
         for i in range(STARTING_COLS):
@@ -104,7 +109,6 @@ class Board(object):
             self.timer.reset()
 
     def trigger_bomb(self, bomb_y: int, bomb_x: int):
-        print(f"BOMB {bomb_y},{bomb_x}")
         for x in range(-1, 2):
             if bomb_x + x >= 0:
                 for y in range(BOARD_HEIGHT):
@@ -146,6 +150,9 @@ class Board(object):
                 self.board[grid_y][offset_x] = selected_block
             else:
                 self.score += int((found * BLOCK_SCORE) * 1.15)
+                # start next level once goal score is hit
+                if self.score > self.goal_score:
+                    self.next_level()
 
     def grid_search(self, x: int, y: int, block_color: Pt) -> int:
         """Recursively search around given block for matching blocks"""
@@ -211,7 +218,7 @@ class Board(object):
             # every level decrease the odds of a bomb spawning
             self.board[y][BOARD_WIDTH - 1] = (
                 BLOCK_BOMB
-                if random.randint(0, 75 + self.level) == 3
+                if random.randint(0, 70 + self.level) == 3
                 else random.choice(self.block_types)
             )
 
