@@ -2,6 +2,7 @@ import random
 
 import pyxel as px
 from config import (
+    BLOCK_BOMB,
     BLOCK_GREEN,
     BLOCK_PINK,
     BLOCK_PURPLE,
@@ -55,8 +56,11 @@ class Board(object):
             self.timer.update()
 
             if self.cursor.selected:
-                self.clear_block_group(self.cursor.x, self.cursor.y)
-                self.shift_blocks_down()
+                if self.board[self.cursor.y][self.cursor.x] == BLOCK_BOMB:
+                    self.trigger_bomb(self.cursor.y, self.cursor.x)
+                else:
+                    self.clear_block_group(self.cursor.x, self.cursor.y)
+                    self.shift_blocks_down()
 
             if self.timer.is_action():
                 self.gen_next_column()
@@ -98,6 +102,13 @@ class Board(object):
         elif px.btnr(px.KEY_F):
             self.gen_next_column()
             self.timer.reset()
+
+    def trigger_bomb(self, bomb_y: int, bomb_x: int):
+        print(f"BOMB {bomb_y},{bomb_x}")
+        for x in range(-1, 2):
+            if bomb_x + x >= 0:
+                for y in range(BOARD_HEIGHT):
+                    self.board[y][bomb_x + x] = False
 
     def game_over_screen(self):
         px.cls(px.COLOR_BLACK)
@@ -197,7 +208,12 @@ class Board(object):
     def gen_next_column(self):
         """Generate a new column of blocks"""
         for y in range(BOARD_HEIGHT):
-            self.board[y][BOARD_WIDTH - 1] = random.choice(self.block_types)
+            # every level decrease the odds of a bomb spawning
+            self.board[y][BOARD_WIDTH - 1] = (
+                BLOCK_BOMB
+                if random.randint(0, 75 + self.level) == 3
+                else random.choice(self.block_types)
+            )
 
         self.shift_blocks_left()
 
