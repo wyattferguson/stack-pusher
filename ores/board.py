@@ -30,16 +30,19 @@ from timer import Timer
 class Board(object):
     """docstring for Board."""
 
-    def __init__(self, level: int = 0):
+    def __init__(self, level: int = 1):
         self.running = True
         self.game_over = False
         self.cursor = Cursor()
         self.score = 0
         self.timer = Timer(5)
         self.level = level
-        self.tboard = [[0] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
-        self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
+        self.board = []
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
+        self.new_level()
+
+    def new_level(self):
+        self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
 
         for i in range(STARTING_COLS):
             self.gen_next_column()
@@ -72,6 +75,8 @@ class Board(object):
             self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
             self.timer.draw()
 
+            # draw score
+            px.text(GRID_SIZE, 7, f"SCORE {self.score}", 8)
             if not self.running:
                 self.pause_screen()
         else:
@@ -90,8 +95,10 @@ class Board(object):
         # trigger next wave of blocks
         elif px.btnr(px.KEY_F):
             self.gen_next_column()
+            self.timer.reset()
 
     def game_over_screen(self):
+        px.cls(px.COLOR_BLACK)
         self.display_notice("GAME OVER")
 
     def pause_screen(self):

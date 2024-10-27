@@ -8,8 +8,8 @@ class Timer(object):
 
     def __init__(self, start_time: int = 10):
         self.start_time = start_time
-        self.cur_time = start_time
         self.delay = 0
+        self.reset()
 
     def update(self):
         # reset timer when it hits 0
@@ -20,6 +20,9 @@ class Timer(object):
         if px.frame_count % FPS == 0:
             if self.cur_time > 0:
                 self.cur_time -= 1
+
+    def reset(self):
+        self.cur_time = self.start_time
 
     def is_action(self) -> bool:
         """Has game entered the action phase"""
