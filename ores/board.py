@@ -168,11 +168,13 @@ class Board(object):
             return 0
 
         self.board[y][x] = False
-        found = 1
-        found += self.grid_search(x + 1, y, block_color)
-        found += self.grid_search(x - 1, y, block_color)
-        found += self.grid_search(x, y + 1, block_color)
-        found += self.grid_search(x, y - 1, block_color)
+        found = (
+            1
+            + self.grid_search(x + 1, y, block_color)
+            + self.grid_search(x - 1, y, block_color)
+            + self.grid_search(x, y + 1, block_color)
+            + self.grid_search(x, y - 1, block_color)
+        )
 
         return found
 
