@@ -75,23 +75,24 @@ class Board(object):
     def draw(self):
         px.bltm(0, 0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        if not self.game_over:
-            # draw all board pieces
-            for y in range(BOARD_HEIGHT):
-                for x in range(BOARD_WIDTH):
-                    if self.board[y][x]:
-                        self.draw_tile(x, y, self.board[y][x])
-
-            # draw cursor
-            self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
-            self.timer.draw()
-
-            # draw score
-            px.text(GRID_SIZE, NAV_Y_OFFSET, f"SCORE {self.score}", COL_NAV)
-            if not self.running:
-                self.pause_screen()
-        else:
+        if self.game_over:
             self.game_over_screen()
+            return
+
+        # draw all board pieces
+        for y in range(BOARD_HEIGHT):
+            for x in range(BOARD_WIDTH):
+                if self.board[y][x]:
+                    self.draw_tile(x, y, self.board[y][x])
+
+        # draw cursor
+        self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
+        self.timer.draw()
+
+        # draw score
+        px.text(GRID_SIZE, NAV_Y_OFFSET, f"SCORE {self.score}", COL_NAV)
+        if not self.running:
+            self.pause_screen()
 
     def input(self):
         """Keyboard / Gamepad Input"""
@@ -109,6 +110,7 @@ class Board(object):
             self.timer.reset()
 
     def trigger_bomb(self, bomb_y: int, bomb_x: int):
+        """Clear out columns surrounding triggered bomb"""
         for x in range(-1, 2):
             if bomb_x + x >= 0:
                 for y in range(BOARD_HEIGHT):
@@ -137,22 +139,24 @@ class Board(object):
     def clear_block_group(self, grid_x: int = 0, grid_y: int = 0):
         """Delete touching blocks of same selected color"""
         offset_x = grid_x
-        if self.board[grid_y][offset_x]:
-            selected_block = self.board[grid_y][offset_x]
+        if not self.board[grid_y][offset_x]:
+            return
 
-            found = self.grid_search(
-                offset_x,
-                grid_y,
-                selected_block,
-            )
+        selected_block = self.board[grid_y][offset_x]
 
-            if found <= 1:
-                self.board[grid_y][offset_x] = selected_block
-            else:
-                self.score += int((found * BLOCK_SCORE) * 1.15)
-                # start next level once goal score is hit
-                if self.score > self.goal_score:
-                    self.next_level()
+        found = self.grid_search(
+            offset_x,
+            grid_y,
+            selected_block,
+        )
+
+        if found <= 1:
+            self.board[grid_y][offset_x] = selected_block
+        else:
+            self.score += int((found * BLOCK_SCORE) * 1.15)
+            # start next level once goal score is hit
+            if self.score > self.goal_score:
+                self.next_level()
 
     def grid_search(self, x: int, y: int, block_color: Pt) -> int:
         """Recursively search around given block for matching blocks"""
