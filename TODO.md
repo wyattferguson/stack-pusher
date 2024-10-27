@@ -1,7 +1,3 @@
 - Add bomb to clear blocks of the same color
-- add end line graphic
 - add push forward graphic
-- add score
-  - 200 single block
-  - 250 x N for multiples
 - add level progress bar, when level is hit clear board
