@@ -1,5 +1,5 @@
 import pyxel as px
-from config import COL_TIMER, FPS
+from config import COL_NAV, FPS, NAV_Y_OFFSET
 from text import center_text_horz
 
 
@@ -14,7 +14,7 @@ class Timer(object):
     def update(self):
         # reset timer when it hits 0
         if self.cur_time == 0:
-            self.cur_time = self.start_time + self.delay
+            self.reset()
 
         # every second count down the timer
         if px.frame_count % FPS == 0:
@@ -22,7 +22,7 @@ class Timer(object):
                 self.cur_time -= 1
 
     def reset(self):
-        self.cur_time = self.start_time
+        self.cur_time = self.start_time + self.delay
 
     def is_action(self) -> bool:
         """Has game entered the action phase"""
@@ -40,16 +40,16 @@ class Timer(object):
 
         px.text(
             center_text_horz(timer_text),
-            7,
+            NAV_Y_OFFSET,
             timer_text,
-            COL_TIMER,
+            COL_NAV,
         )
 
         # draw count down bars
         time_per = self.cur_time / self.start_time
         screen_middle = px.width // 2
         bar_size = screen_middle * time_per
-        px.rect(0, 0, px.width, 4, 1)
+        px.rect(0, 0, px.width, 4, px.COLOR_DARK_BLUE)
         if not self.delay:
-            px.rect(0, 0, bar_size, 4, COL_TIMER)
-            px.rect(px.width - bar_size, 0, px.width, 4, COL_TIMER)
+            px.rect(0, 0, bar_size, 4, COL_NAV)
+            px.rect(px.width - bar_size, 0, px.width, 4, COL_NAV)

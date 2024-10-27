@@ -9,11 +9,13 @@ from config import (
     BLOCK_YELLOW,
     BOARD_HEIGHT,
     BOARD_WIDTH,
+    COL_NAV,
     GAME_SCALE,
     GRID_SIZE,
     GRID_X_OFFSET,
     GRID_Y_OFFSET,
     IMAGE_SHEET,
+    NAV_Y_OFFSET,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     SPRITE_OFFSET,
@@ -76,7 +78,7 @@ class Board(object):
             self.timer.draw()
 
             # draw score
-            px.text(GRID_SIZE, 7, f"SCORE {self.score}", 8)
+            px.text(GRID_SIZE, NAV_Y_OFFSET, f"SCORE {self.score}", COL_NAV)
             if not self.running:
                 self.pause_screen()
         else:
@@ -113,7 +115,7 @@ class Board(object):
             y_center - 5,
             len(text) * 5 + 10,
             14,
-            7,
+            px.COLOR_WHITE,
         )
         px.text(x_center, y_center, text, 8)
 
@@ -133,7 +135,6 @@ class Board(object):
                 self.board[grid_y][offset_x] = selected_block
             else:
                 self.score += int((found * BLOCK_SCORE) * 1.15)
-                print(self.score)
 
     def grid_search(self, x: int, y: int, block_color: Pt) -> int:
         """Recursively search around given block for matching blocks"""

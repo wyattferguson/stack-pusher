@@ -1,7 +1,6 @@
 import pyxel as px
 from board import Board
 from config import (
-    COL_BACKGROUND,
     DISPLAY_SCALE,
     FPS,
     SCREEN_HEIGHT,
@@ -48,7 +47,7 @@ class Ores:
 
     def draw(self):
         """Redraw game board and sprites"""
-        px.cls(COL_BACKGROUND)
+        px.cls(px.COLOR_BLACK)
         self.board.draw()
 
 

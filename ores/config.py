@@ -1,5 +1,6 @@
-# Game States
 from dataclasses import dataclass
+
+import pyxel as px
 
 
 @dataclass
@@ -29,11 +30,11 @@ GRID_Y_OFFSET = 1 * GRID_SIZE
 DISPLAY_SCALE = 4
 IMAGE_SHEET = 0
 TILE_SIZE = 8
+NAV_Y_OFFSET = 7
 
 # Colors
+COL_NAV = px.COLOR_RED
 TRANSPARENCY = 0
-COL_BACKGROUND = 3
-COL_TIMER = 8
 
 # Game States
 STATE_MENU = 0
