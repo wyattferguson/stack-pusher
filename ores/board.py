@@ -5,6 +5,7 @@ from config import (
     BLOCK_GREEN,
     BLOCK_PINK,
     BLOCK_PURPLE,
+    BLOCK_SCORE,
     BLOCK_YELLOW,
     BOARD_HEIGHT,
     BOARD_WIDTH,
@@ -33,6 +34,7 @@ class Board(object):
         self.running = True
         self.game_over = False
         self.cursor = Cursor()
+        self.score = 0
         self.timer = Timer(5)
         self.level = level
         self.tboard = [[0] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
@@ -122,6 +124,9 @@ class Board(object):
 
             if found <= 1:
                 self.board[grid_y][offset_x] = selected_block
+            else:
+                self.score += int((found * BLOCK_SCORE) * 1.15)
+                print(self.score)
 
     def grid_search(self, x: int, y: int, block_color: Pt) -> int:
         """Recursively search around given block for matching blocks"""
@@ -197,6 +202,7 @@ class Board(object):
                 last_empty_col = x
                 break
 
+        # shift all blocks after the empty column left
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH - 1):
                 if x + 1 > last_empty_col:
