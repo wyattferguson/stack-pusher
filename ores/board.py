@@ -86,8 +86,13 @@ class Board(object):
                 if self.board[y][x]:
                     self.draw_tile(x, y, self.board[y][x])
 
-        # draw cursor
         self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
+        self.draw_nav()
+
+        if not self.running:
+            self.pause_screen()
+
+    def draw_nav(self):
         self.timer.draw()
 
         # draw level
@@ -112,18 +117,11 @@ class Board(object):
             px.COLOR_RED,
         )
 
-        if not self.running:
-            self.pause_screen()
-
     def input(self):
         """Keyboard / Gamepad Input"""
         # pause / unpause game
         if px.btn(px.KEY_P) or px.btn(px.GAMEPAD1_BUTTON_START):
             self.running = not self.running
-
-        # kill game
-        elif px.btn(px.KEY_K):
-            self.game_over = True
 
         # trigger next wave of blocks
         elif px.btnr(px.KEY_F):
@@ -216,7 +214,6 @@ class Board(object):
             scale=GAME_SCALE,
             colkey=TRANSPARENCY,
         )
-        # print(self.x, self.y, BOARD_WIDTH, BOARD_HEIGHT)
 
     def convert_grid_to_px(self, grid_pos: int = 0) -> int:
         """Convert grid coordinates to world pixels"""
