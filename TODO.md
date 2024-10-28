@@ -1,2 +1,0 @@
-- add push forward graphic
-- add level progress bar, when level is hit clear board
