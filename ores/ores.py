@@ -1,3 +1,11 @@
+# title: Block Attack
+# author: Wyatt Ferguson
+# desc: A Pyxel platformer example
+# site: https://github.com/wyattferguson/ores
+# license: MIT
+# version: 1.0
+
+
 import pyxel as px
 from board import Board
 from config import (
