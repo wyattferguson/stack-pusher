@@ -48,9 +48,10 @@ class Board(object):
 
     def next_level(self):
         self.level += 1
+        self.score = 0
         self.goal_score = GOAL_SCORE * self.level * 1.1
-        # self.display_notice(f"LEVEL {self.level}")
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
+        self.timer.reset()
 
         for i in range(STARTING_COLS):
             self.gen_next_column()
@@ -89,8 +90,28 @@ class Board(object):
         self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
         self.timer.draw()
 
-        # draw score
-        px.text(GRID_SIZE, NAV_Y_OFFSET, f"SCORE {self.score}", COL_NAV)
+        # draw level
+        px.text(
+            px.width - (3 * GRID_SIZE), NAV_Y_OFFSET, f"LEVEL {self.level}", COL_NAV
+        )
+
+        # draw next level progress bar
+        px.text(GRID_SIZE // 2, NAV_Y_OFFSET, "NEXT", COL_NAV)
+        px.rect(
+            GRID_SIZE * 1.75,
+            NAV_Y_OFFSET,
+            GRID_SIZE * 2.5,
+            px.FONT_HEIGHT - 1,
+            px.COLOR_LIGHT_BLUE,
+        )
+        px.rect(
+            GRID_SIZE * 1.75,
+            NAV_Y_OFFSET,
+            GRID_SIZE * 2.5 * (self.score / self.goal_score),
+            px.FONT_HEIGHT - 1,
+            px.COLOR_RED,
+        )
+
         if not self.running:
             self.pause_screen()
 

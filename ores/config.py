@@ -9,24 +9,26 @@ class Pt:
     y: int = 0
 
     def __eq__(self, other: object) -> bool:
+        if not other:
+            return False
         return self.x == other.x and self.y == other.y
 
 
 # Gameplay Settings
-FPS = 15
+FPS = 10
 GAME_SCALE = 2
 GRID_SIZE = 8 * GAME_SCALE
 BOARD_HEIGHT = 10
 BOARD_WIDTH = 12
-STARTING_COLS = 5
+STARTING_COLS = 4
 BLOCK_SCORE = 20
 GOAL_SCORE = 1000
 
 # Graphics Settings
 ANIMATION_DELAY = 4
-SCREEN_WIDTH = (BOARD_WIDTH + 4) * GRID_SIZE
+SCREEN_WIDTH = (BOARD_WIDTH + 1) * GRID_SIZE
 SCREEN_HEIGHT = (BOARD_HEIGHT + 2) * GRID_SIZE
-GRID_X_OFFSET = 5 * GRID_SIZE
+GRID_X_OFFSET = 2 * GRID_SIZE
 GRID_Y_OFFSET = 1 * GRID_SIZE
 DISPLAY_SCALE = 4
 IMAGE_SHEET = 0
