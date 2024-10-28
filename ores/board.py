@@ -56,10 +56,15 @@ class Board(object):
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.timer.reset()
 
-        for i in range(STARTING_COLS):
+        # increase number of starting columns every 5 levels
+        starting_cols = STARTING_COLS + (self.level // 5)
+        if starting_cols > 10:
+            starting_cols = 10
+
+        for i in range(starting_cols):
             self.gen_next_column()
 
-        px.play(1, px.sound(SND_NEW_LEVEL), 60, False, False)
+        px.play(1, px.sounds[SND_NEW_LEVEL])
 
     def update(self):
         if self.running and not self.game_over:
@@ -75,7 +80,7 @@ class Board(object):
 
             if self.timer.is_action():
                 self.gen_next_column()
-                # px.play(1, px.sound(1), 30, False, False)
+                # px.play(1, px.sounds[SND_PUSH_BLOCKS])
 
         self.input()
 
