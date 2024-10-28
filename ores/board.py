@@ -20,9 +20,12 @@ from config import (
     NAV_Y_OFFSET,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
+    SND_NEW_LEVEL,
+    SND_PUSH_BLOCKS,
     SPRITE_OFFSET,
     STARTING_COLS,
     TILE_SIZE,
+    TIMER_LENGTH,
     TRANSPARENCY,
     Pt,
 )
@@ -40,7 +43,7 @@ class Board(object):
         self.cursor = Cursor()
         self.score = 0
         self.goal_score = 0
-        self.timer = Timer(5)
+        self.timer = Timer(TIMER_LENGTH)
         self.level = 0
         self.board = []
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
@@ -49,12 +52,14 @@ class Board(object):
     def next_level(self):
         self.level += 1
         self.score = 0
-        self.goal_score = GOAL_SCORE * self.level * 1.1
+        self.goal_score = GOAL_SCORE * (1 + self.level / 10)
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.timer.reset()
 
         for i in range(STARTING_COLS):
             self.gen_next_column()
+
+        px.play(1, px.sound(SND_NEW_LEVEL), 60, False, False)
 
     def update(self):
         if self.running and not self.game_over:
@@ -70,6 +75,7 @@ class Board(object):
 
             if self.timer.is_action():
                 self.gen_next_column()
+                # px.play(1, px.sound(1), 30, False, False)
 
         self.input()
 
@@ -95,7 +101,7 @@ class Board(object):
     def draw_nav(self):
         self.timer.draw()
 
-        # draw level
+        # draw current level
         px.text(
             px.width - (3 * GRID_SIZE), NAV_Y_OFFSET, f"LEVEL {self.level}", COL_NAV
         )

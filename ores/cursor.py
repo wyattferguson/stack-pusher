@@ -22,7 +22,7 @@ class Cursor:
         self.selected = False
 
     @property
-    def sprite(self):
+    def sprite(self) -> Pt:
         return Pt(self._sprite.x + self.frame, self._sprite.y)
 
     def update(self):
