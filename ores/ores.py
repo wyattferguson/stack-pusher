@@ -1,6 +1,6 @@
-# title: Block Attack
+# title: Ores
 # author: Wyatt Ferguson
-# desc: A Pyxel platformer example
+# desc: A remake of the flash game Ores
 # site: https://github.com/wyattferguson/ores
 # license: MIT
 # version: 1.0

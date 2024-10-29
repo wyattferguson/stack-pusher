@@ -21,7 +21,6 @@ from config import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     SND_NEW_LEVEL,
-    SND_PUSH_BLOCKS,
     SPRITE_OFFSET,
     STARTING_COLS,
     TILE_SIZE,
@@ -35,8 +34,6 @@ from timer import Timer
 
 
 class Board(object):
-    """docstring for Board."""
-
     def __init__(self):
         self.running = True
         self.game_over = False
@@ -80,7 +77,6 @@ class Board(object):
 
             if self.timer.is_action():
                 self.gen_next_column()
-                # px.play(1, px.sounds[SND_PUSH_BLOCKS])
 
         self.input()
 
@@ -104,6 +100,7 @@ class Board(object):
             self.pause_screen()
 
     def draw_nav(self):
+        """Draw topbar with timer and level progress"""
         self.timer.draw()
 
         # draw current level
@@ -111,8 +108,8 @@ class Board(object):
             px.width - (3 * GRID_SIZE), NAV_Y_OFFSET, f"LEVEL {self.level}", COL_NAV
         )
 
-        # draw next level progress bar
         px.text(GRID_SIZE // 2, NAV_Y_OFFSET, "NEXT", COL_NAV)
+        # draw next level progress bar
         px.rect(
             GRID_SIZE * 1.75,
             NAV_Y_OFFSET,
