@@ -1,8 +1,10 @@
 ![ores](https://i.imgur.com/TV05DzJ.png)
 
-# :joystick: Ores
+# :joystick: Ores in Python
 
 A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future.
+
+[Play in your browser](https://wyattferguson.github.io/)
 
 ## Gameplay
 
@@ -38,7 +40,6 @@ To run it simply:
 
 ```
 poetry run python ./ores/ores.py
-
 ```
 
 # References
