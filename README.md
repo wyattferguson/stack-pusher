@@ -1,6 +1,22 @@
+![ores](https://i.imgur.com/TV05DzJ.png)
+
 # :joystick: Ores
 
-A remake of the classic flash game ores with Pyxels.
+A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future.
+
+## Gameplay
+
+Stop the blocks from being pushed of the screen! Destroy touching blocks of the same color to earn points towards leveling up. When you level up the screen restarts, but gets tougher every level. If the blocks go off the left side of the screen you lose.
+
+## Controls
+
+```
+W,A,S,D - Movement
+F - Push stack forward
+Space - Select a block
+R - Restart Game
+P - Pause Game
+```
 
 # Installation & How To Use
 
@@ -28,12 +44,15 @@ poetry run python ./ores/ores.py
 # References
 
 - Pyxel ([https://github.com/kitao/pyxel](https://github.com/kitao/pyxel))
+- Orignal Ores Gameplay ([https://www.youtube.com/watch?v=vVu9ROoBZKQ](https://www.youtube.com/watch?v=vVu9ROoBZKQ))
 
 ## :postbox: Contact & Support
 
-Created by [Wyatt Ferguson](https://github.com/wyattferguson)
+Created by [Wyatt Ferguson](https://twitter.com/wyattxdev)
 
-For any questions or comments you can send them to me on my socials:
+For any questions or comments heres how you can reach me:
+
+### :shaved_ice: Follow on [BlueSky @wyattf](wyattf.bsky.social)
 
 ### :tropical_drink: Follow on [Twitter @wyattxdev](https://twitter.com/wyattxdev)
 
