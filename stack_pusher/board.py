@@ -24,12 +24,13 @@ from config import (
     SPRITE_OFFSET,
     STARTING_COLS,
     TILE_SIZE,
+    TILEMAP_GAME,
     TIMER_LENGTH,
     TRANSPARENCY,
     Pt,
 )
 from cursor import Cursor
-from text import center_text_horz, center_text_vert
+from text import display_notice
 from timer import Timer
 
 
@@ -81,7 +82,7 @@ class Board(object):
         self.input()
 
     def draw(self):
-        px.bltm(0, 0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+        px.bltm(0, 0, TILEMAP_GAME, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         if self.game_over:
             self.game_over_screen()
@@ -145,23 +146,10 @@ class Board(object):
 
     def game_over_screen(self):
         px.cls(px.COLOR_BLACK)
-        self.display_notice("GAME OVER")
+        display_notice("GAME OVER")
 
     def pause_screen(self):
-        self.display_notice("PAUSED")
-
-    def display_notice(self, text: str = ""):
-        """Display text box in the center of the board"""
-        x_center = center_text_horz(text)
-        y_center = center_text_vert()
-        px.rect(
-            center_text_horz(text) - 10,
-            y_center - 5,
-            len(text) * 5 + 10,
-            14,
-            px.COLOR_WHITE,
-        )
-        px.text(x_center, y_center, text, 8)
+        display_notice("PAUSED")
 
     def clear_block_group(self, grid_x: int = 0, grid_y: int = 0):
         """Delete touching blocks of same selected color"""

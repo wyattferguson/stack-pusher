@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ores"
+name = "stack-pusher"
 version = "0.1.0"
 description = ""
 authors = ["Wyatt Ferguson <wyattf@gmail.com>"]

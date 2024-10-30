@@ -5,6 +5,8 @@ import pyxel as px
 
 @dataclass
 class Pt:
+    """A simple dataclass to make dealing with grid x/y's more readable"""
+
     x: int = 0
     y: int = 0
 
@@ -45,7 +47,7 @@ STATE_MENU = 0
 STATE_PLAYING = 1
 STATE_GAMEOVER = 3
 
-# Sprites
+# Graphics
 SPRITE_SIZE = 8
 SPRITE_OFFSET = 4
 CURSOR_SPRITE = Pt(0, 0)
@@ -54,6 +56,8 @@ BLOCK_PINK = Pt(16, 0)
 BLOCK_YELLOW = Pt(24, 0)
 BLOCK_GREEN = Pt(16, 8)
 BLOCK_PURPLE = Pt(24, 8)
+TILEMAP_GAME = 0
+TILEMAP_MENU = 1
 
 # Sounds
 SND_NEW_LEVEL = 1

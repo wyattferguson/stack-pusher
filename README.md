@@ -1,6 +1,6 @@
 ![ores](https://i.imgur.com/TV05DzJ.png)
 
-# :joystick: Ores in Python
+# :joystick: Stack Pusher
 
 A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future.
 
@@ -39,7 +39,7 @@ poetry install
 To run it simply:
 
 ```
-poetry run python ./ores/ores.py
+poetry run python ./stack_pusher/stack_pusher.py
 ```
 
 # References
@@ -52,6 +52,8 @@ poetry run python ./ores/ores.py
 Created by [Wyatt Ferguson](https://twitter.com/wyattxdev)
 
 For any questions or comments heres how you can reach me:
+
+### :mailbox_with_mail: Email me at [wyattxdev@duck.com](wyattxdev@duck.com)
 
 ### :shaved_ice: Follow on [BlueSky @wyattf](wyattf.bsky.social)
 
