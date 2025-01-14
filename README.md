@@ -22,24 +22,14 @@ P - Pause Game
 
 # Installation & How To Use
 
-Installation is pretty straight forward, Im using [Poetry](https://python-poetry.org/docs/) to manage everything.
+Installation is pretty straight forward, Im using [UV](https://docs.astral.sh/uv/) to manage everything.
 
-First if you dont Poetry installed run this:
-
-```
-pipx install poetry
-```
-
-Then install the dependencies with:
+To get it all running from scratch:
 
 ```
-poetry install
-```
+uv sync
 
-To run it simply:
-
-```
-poetry run python ./stack_pusher/stack_pusher.py
+uv run ./src/stack_pusher.py
 ```
 
 # References

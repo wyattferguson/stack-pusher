@@ -1,4 +1,5 @@
 import pyxel as px
+
 from config import COL_NAV, FPS, NAV_Y_OFFSET
 from text import center_text_horz
 
@@ -12,6 +13,8 @@ class Timer(object):
         self.reset()
 
     def update(self):
+        """Update countdown every frame"""
+
         # reset timer when it hits 0
         if self.cur_time == 0:
             self.reset()
@@ -22,6 +25,7 @@ class Timer(object):
                 self.cur_time -= 1
 
     def reset(self):
+        """Reset countdown back to start time"""
         self.cur_time = self.start_time + self.delay
 
     def is_action(self) -> bool:
@@ -29,6 +33,8 @@ class Timer(object):
         return self.cur_time == 0
 
     def draw(self):
+        """Draw timer text and countdown bars"""
+
         # draw time left in the center of the screen
         if self.cur_time > 0 and self.cur_time <= self.start_time:
             timer_text = f"{self.cur_time}"

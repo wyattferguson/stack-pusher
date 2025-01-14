@@ -5,7 +5,7 @@ import pyxel as px
 
 @dataclass
 class Pt:
-    """A simple dataclass to make dealing with grid x/y's more readable"""
+    """Simplify dealing with grid x/y and all board objects"""
 
     x: int = 0
     y: int = 0

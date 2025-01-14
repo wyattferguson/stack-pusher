@@ -7,6 +7,7 @@
 
 
 import pyxel as px
+
 from board import Board
 from config import (
     COL_NAV,
@@ -22,6 +23,8 @@ from text import display_notice
 
 
 class StackPusher:
+    """Main game class"""
+
     def __init__(self):
         px.init(
             SCREEN_WIDTH,
@@ -71,6 +74,7 @@ class StackPusher:
             self.board.draw()
 
     def draw_menu(self):
+        """Display main menu text on start up"""
         display_notice("STACK PUSHER", y_offset=-50)
         px.text(
             5,

@@ -1,4 +1,5 @@
 import pyxel as px
+
 from config import (
     ANIMATION_DELAY,
     BOARD_HEIGHT,
@@ -10,6 +11,8 @@ from config import (
 
 
 class Cursor:
+    """Cursor class for selecting tiles on the board"""
+
     def __init__(
         self,
         x: int = 0,
@@ -23,15 +26,17 @@ class Cursor:
 
     @property
     def sprite(self) -> Pt:
+        """Convert Cursor to Pt object"""
         return Pt(self._sprite.x + self.frame, self._sprite.y)
 
     def update(self):
+        """Update cursor animation every frame"""
         if px.frame_count % ANIMATION_DELAY == 0:
             self.frame = SPRITE_SIZE if self.frame == 0 else 0
         self.input()
 
     def input(self):
-        """Keyboard / Gamepad Input"""
+        """Read Keyboard / Gamepad Input"""
         if px.btn(px.KEY_W) or px.btn(px.GAMEPAD1_BUTTON_DPAD_UP):
             if self.y > 0:
                 self.y -= 1

@@ -1,6 +1,7 @@
 import random
 
 import pyxel as px
+
 from config import (
     BLOCK_BOMB,
     BLOCK_GREEN,
@@ -48,6 +49,7 @@ class Board(object):
         self.next_level()
 
     def next_level(self):
+        """Increase game difficulty and reset board"""
         self.level += 1
         self.score = 0
         self.goal_score = GOAL_SCORE * (1 + self.level / 10)
@@ -65,6 +67,7 @@ class Board(object):
         px.play(1, px.sounds[SND_NEW_LEVEL])
 
     def update(self):
+        """Update game state every frame"""
         if self.running and not self.game_over:
             self.cursor.update()
             self.timer.update()
@@ -82,6 +85,7 @@ class Board(object):
         self.input()
 
     def draw(self):
+        """Draw game state every frame"""
         px.bltm(0, 0, TILEMAP_GAME, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         if self.game_over:
@@ -127,7 +131,7 @@ class Board(object):
         )
 
     def input(self):
-        """Keyboard / Gamepad Input"""
+        """Get Keyboard / Gamepad Input"""
         # pause / unpause game
         if px.btn(px.KEY_P) or px.btn(px.GAMEPAD1_BUTTON_START):
             self.running = not self.running
@@ -145,10 +149,12 @@ class Board(object):
                     self.board[y][bomb_x + x] = False
 
     def game_over_screen(self):
+        """Overlay game over message on screen"""
         px.cls(px.COLOR_BLACK)
         display_notice("GAME OVER")
 
     def pause_screen(self):
+        """Overlay pause message on screen"""
         display_notice("PAUSED")
 
     def clear_block_group(self, grid_x: int = 0, grid_y: int = 0):
@@ -159,7 +165,7 @@ class Board(object):
 
         selected_block = self.board[grid_y][offset_x]
 
-        found = self.grid_search(
+        found = self.connected_blocks(
             offset_x,
             grid_y,
             selected_block,
@@ -173,9 +179,12 @@ class Board(object):
             if self.score > self.goal_score:
                 self.next_level()
 
-    def grid_search(self, x: int, y: int, block_color: Pt) -> int:
-        """Recursively search around given block for matching blocks"""
+    def connected_blocks(self, x: int, y: int, block_color: Pt) -> int:
+        """Recursively search around given block for matching blocks
+        :return int: number of connected blocks found
+        """
         cur_block = self.board[y][x]
+        # has the search hit a wall or a different color block
         if (
             not cur_block
             or cur_block != block_color
@@ -187,12 +196,13 @@ class Board(object):
             return 0
 
         self.board[y][x] = False
+        # recursively search all 4 directions around current block
         found = (
             1
-            + self.grid_search(x + 1, y, block_color)
-            + self.grid_search(x - 1, y, block_color)
-            + self.grid_search(x, y + 1, block_color)
-            + self.grid_search(x, y - 1, block_color)
+            + self.connected_blocks(x + 1, y, block_color)
+            + self.connected_blocks(x - 1, y, block_color)
+            + self.connected_blocks(x, y + 1, block_color)
+            + self.connected_blocks(x, y - 1, block_color)
         )
 
         return found
@@ -245,7 +255,8 @@ class Board(object):
         self.shift_blocks_left()
 
     def shift_blocks_left(self):
-        """Shift every column forward 1 grid space"""
+        """Shift every column left 1 grid space"""
+
         # find furthest right empty column
         last_empty_col = 0
         for x in range(BOARD_WIDTH - 1, 0, -1):

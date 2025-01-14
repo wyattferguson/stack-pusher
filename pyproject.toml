@@ -1,18 +1,10 @@
-[tool.poetry]
+[project]
 name = "stack-pusher"
 version = "0.1.0"
-description = ""
-authors = ["Wyatt Ferguson <wyattf@gmail.com>"]
+description = "A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future."
 license = "MIT"
 readme = "README.md"
-package-mode = false
-
-[tool.poetry.dependencies]
-python = "^3.12"
-ruff = "^0.7.1"
-pyxel = "^2.2.7"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.12"
+dependencies = [
+    "pyxel>=2.2.10",
+]
