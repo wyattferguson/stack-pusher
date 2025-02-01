@@ -39,7 +39,7 @@ uv run ./src/stack_pusher.py
 
 ## :postbox: Contact & Support
 
-Created by [Wyatt Ferguson](https://twitter.com/wyattxdev)
+Created by [Wyatt Ferguson](https://wyattf.bsky.social)
 
 For any questions or comments heres how you can reach me:
 
