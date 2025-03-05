@@ -38,6 +38,9 @@ uv sync
 
 # run game
 task run
+
+# build html version
+task build
 ```
 
 ## References

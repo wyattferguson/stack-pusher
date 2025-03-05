@@ -10,7 +10,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "pyxel>=2.2.10",
+    "pyxel>=2.3.8",
 ]
 
 classifiers = [
@@ -39,10 +39,12 @@ documentation = "https://github.com/wyattferguson/stack-pusher"
 issues = "https://github.com/wyattferguson/stack-pusher/issues"
 
 [tool.taskipy.tasks]
-format = "ruff format ./src/"
-lint = "ruff check --fix ./src/ && mypy ./src/"
-typecheck = "mypy ./src/"
-run = "uv run ./src/stack_pusher.py"
+format = "ruff format ./stack_pusher/"
+lint = "ruff check --fix ./stack_pusher/ && mypy ./stack_pusher/"
+typecheck = "mypy ./stack_pusher/"
+package = "pyxel package ./stack_pusher/ ./stack_pusher/stack_pusher.py"
+build = "task package && pyxel app2html stack_pusher.pyxapp"
+run = "uv run ./stack_pusher/stack_pusher.py"
 
 [tool.ruff]
 line-length = 100
