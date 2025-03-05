@@ -20,19 +20,27 @@ R - Restart Game
 P - Pause Game
 ```
 
-# Installation & How To Use
+## Development Setup
 
 Installation is pretty straight forward, Im using [UV](https://docs.astral.sh/uv/) to manage everything.
 
 To get it all running from scratch:
 
 ```
+# spin up a virtual enviroment
+uv venv
+
+# activate virtual enviroment
+.venv\Scripts\activate
+
+# install all the cool dependancies
 uv sync
 
-uv run ./src/stack_pusher.py
+# run tch
+task run
 ```
 
-# References
+## References
 
 - Pyxel ([https://github.com/kitao/pyxel](https://github.com/kitao/pyxel))
 - Orignal Ores Gameplay ([https://www.youtube.com/watch?v=vVu9ROoBZKQ](https://www.youtube.com/watch?v=vVu9ROoBZKQ))
