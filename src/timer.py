@@ -4,15 +4,15 @@ from config import COL_NAV, FPS, NAV_Y_OFFSET
 from text import center_text_horz
 
 
-class Timer(object):
+class Timer:
     """Board action timer"""
 
-    def __init__(self, start_time: int = 10):
+    def __init__(self, start_time: int = 10) -> None:
         self.start_time = start_time
         self.delay = 0
         self.reset()
 
-    def update(self):
+    def update(self) -> None:
         """Update countdown every frame"""
 
         # reset timer when it hits 0
@@ -24,7 +24,7 @@ class Timer(object):
             if self.cur_time > 0:
                 self.cur_time -= 1
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset countdown back to start time"""
         self.cur_time = self.start_time + self.delay
 
@@ -32,7 +32,7 @@ class Timer(object):
         """Has game entered the action phase"""
         return self.cur_time == 0
 
-    def draw(self):
+    def draw(self) -> None:
         """Draw timer text and countdown bars"""
 
         # draw time left in the center of the screen
@@ -49,6 +49,7 @@ class Timer(object):
             NAV_Y_OFFSET,
             timer_text,
             COL_NAV,
+            font=None,
         )
 
         # draw count down bars

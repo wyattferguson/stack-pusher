@@ -1,7 +1,7 @@
 # title: Stack Pusher
 # author: Wyatt Ferguson
 # desc: A python remake of the flash game Ores
-# site: https://github.com/wyattferguson/stack-pusher
+# site: https://wyattferguson.github.io/
 # license: MIT
 # version: 1.0
 
@@ -25,7 +25,7 @@ from text import display_notice
 class StackPusher:
     """Main game class"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         px.init(
             SCREEN_WIDTH,
             SCREEN_HEIGHT,
@@ -34,29 +34,24 @@ class StackPusher:
             display_scale=DISPLAY_SCALE,
         )
         px.load("assets.pyxres")
-
-        self.board = False
+        self.board = Board()
         self.state = STATE_MENU
         px.run(self.update, self.draw)
 
-    def update(self):
+    def update(self) -> None:
         """Update game state every frame"""
         self.keyboard()
         if self.state == STATE_PLAYING:
             self.board.update()
 
-    def new_game(self):
+    def new_game(self) -> None:
         """Full game restart"""
         self.board = Board()
 
-    def keyboard(self):
+    def keyboard(self) -> None:
         """Watch keyboard for Enter/Space and R(Reset)"""
         if self.state == STATE_MENU:
-            if (
-                px.btn(px.KEY_RETURN)
-                or px.btn(px.KEY_SPACE)
-                or px.btn(px.GAMEPAD1_BUTTON_START)
-            ):
+            if px.btn(px.KEY_RETURN) or px.btn(px.KEY_SPACE) or px.btn(px.GAMEPAD1_BUTTON_START):
                 self.state = STATE_PLAYING
                 self.new_game()
 
@@ -64,7 +59,7 @@ class StackPusher:
         elif px.btn(px.KEY_R):
             self.new_game()
 
-    def draw(self):
+    def draw(self) -> None:
         """Redraw game board and sprites"""
         px.cls(px.COLOR_BLACK)
         if self.state == STATE_MENU:
@@ -73,7 +68,7 @@ class StackPusher:
         elif self.state == STATE_PLAYING:
             self.board.draw()
 
-    def draw_menu(self):
+    def draw_menu(self) -> None:
         """Display main menu text on start up"""
         display_notice("STACK PUSHER", y_offset=-50)
         px.text(
@@ -87,6 +82,7 @@ class StackPusher:
             P - Pause
             """,
             COL_NAV,
+            font=None,
         )
 
 

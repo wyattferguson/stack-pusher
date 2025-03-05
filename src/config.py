@@ -11,7 +11,7 @@ class Pt:
     y: int = 0
 
     def __eq__(self, other: object) -> bool:
-        if not other:
+        if not isinstance(other, Pt):
             return False
         return self.x == other.x and self.y == other.y
 

@@ -35,24 +35,24 @@ from text import display_notice
 from timer import Timer
 
 
-class Board(object):
-    def __init__(self):
-        self.running = True
-        self.game_over = False
+class Board:
+    def __init__(self) -> None:
+        self.running: bool = True
+        self.game_over: bool = False
         self.cursor = Cursor()
-        self.score = 0
-        self.goal_score = 0
+        self.score: int = 0
+        self.goal_score: int = 0
         self.timer = Timer(TIMER_LENGTH)
-        self.level = 0
-        self.board = []
+        self.level: int = 0
+        self.board: list[list[Pt | bool]] = []
         self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
         self.next_level()
 
-    def next_level(self):
+    def next_level(self) -> None:
         """Increase game difficulty and reset board"""
         self.level += 1
         self.score = 0
-        self.goal_score = GOAL_SCORE * (1 + self.level / 10)
+        self.goal_score = int(GOAL_SCORE * (1 + self.level / 10))
         self.board = [[False] * BOARD_WIDTH for i in range(BOARD_HEIGHT + 1)]
         self.timer.reset()
 
@@ -66,7 +66,7 @@ class Board(object):
 
         px.play(1, px.sounds[SND_NEW_LEVEL])
 
-    def update(self):
+    def update(self) -> None:
         """Update game state every frame"""
         if self.running and not self.game_over:
             self.cursor.update()
@@ -74,7 +74,7 @@ class Board(object):
 
             if self.cursor.selected:
                 if self.board[self.cursor.y][self.cursor.x] == BLOCK_BOMB:
-                    self.trigger_bomb(self.cursor.y, self.cursor.x)
+                    self.trigger_bomb(self.cursor.x)
                 else:
                     self.clear_block_group(self.cursor.x, self.cursor.y)
                     self.shift_blocks_down()
@@ -84,7 +84,7 @@ class Board(object):
 
         self.input()
 
-    def draw(self):
+    def draw(self) -> None:
         """Draw game state every frame"""
         px.bltm(0, 0, TILEMAP_GAME, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -104,16 +104,27 @@ class Board(object):
         if not self.running:
             self.pause_screen()
 
-    def draw_nav(self):
+    def draw_nav(self) -> None:
         """Draw topbar with timer and level progress"""
         self.timer.draw()
 
         # draw current level
         px.text(
-            px.width - (3 * GRID_SIZE), NAV_Y_OFFSET, f"LEVEL {self.level}", COL_NAV
+            px.width - (3 * GRID_SIZE),
+            NAV_Y_OFFSET,
+            f"LEVEL {self.level}",
+            COL_NAV,
+            font=None,
         )
 
-        px.text(GRID_SIZE // 2, NAV_Y_OFFSET, "NEXT", COL_NAV)
+        px.text(
+            GRID_SIZE // 2,
+            NAV_Y_OFFSET,
+            "NEXT",
+            COL_NAV,
+            font=None,
+        )
+
         # draw next level progress bar
         px.rect(
             GRID_SIZE * 1.75,
@@ -130,7 +141,7 @@ class Board(object):
             px.COLOR_RED,
         )
 
-    def input(self):
+    def input(self) -> None:
         """Get Keyboard / Gamepad Input"""
         # pause / unpause game
         if px.btn(px.KEY_P) or px.btn(px.GAMEPAD1_BUTTON_START):
@@ -141,29 +152,29 @@ class Board(object):
             self.gen_next_column()
             self.timer.reset()
 
-    def trigger_bomb(self, bomb_y: int, bomb_x: int):
+    def trigger_bomb(self, bomb_x: int) -> None:
         """Clear out columns surrounding triggered bomb"""
         for x in range(-1, 2):
             if bomb_x + x >= 0:
                 for y in range(BOARD_HEIGHT):
                     self.board[y][bomb_x + x] = False
 
-    def game_over_screen(self):
+    def game_over_screen(self) -> None:
         """Overlay game over message on screen"""
         px.cls(px.COLOR_BLACK)
         display_notice("GAME OVER")
 
-    def pause_screen(self):
+    def pause_screen(self) -> None:
         """Overlay pause message on screen"""
         display_notice("PAUSED")
 
-    def clear_block_group(self, grid_x: int = 0, grid_y: int = 0):
+    def clear_block_group(self, grid_x: int = 0, grid_y: int = 0) -> None:
         """Delete touching blocks of same selected color"""
         offset_x = grid_x
         if not self.board[grid_y][offset_x]:
             return
 
-        selected_block = self.board[grid_y][offset_x]
+        selected_block: Pt | bool = self.board[grid_y][offset_x]
 
         found = self.connected_blocks(
             offset_x,
@@ -179,9 +190,16 @@ class Board(object):
             if self.score > self.goal_score:
                 self.next_level()
 
-    def connected_blocks(self, x: int, y: int, block_color: Pt) -> int:
+    def connected_blocks(self, x: int, y: int, block_color: Pt | bool) -> int:
         """Recursively search around given block for matching blocks
-        :return int: number of connected blocks found
+
+        Args:
+            x (int): Current block x position
+            y (int): Current block y position
+            block_color (Pt): Color of the block to match
+
+        Returns:
+            int: number of connected blocks found
         """
         cur_block = self.board[y][x]
         # has the search hit a wall or a different color block
@@ -207,8 +225,11 @@ class Board(object):
 
         return found
 
-    def draw_tile(self, x: int, y: int, sprite: Pt):
+    def draw_tile(self, x: int, y: int, sprite: Pt | bool) -> None:
         """Draw single tile sprite onto game board"""
+        if not isinstance(sprite, Pt):
+            return
+
         px.blt(
             self.convert_grid_to_px(x) + GRID_X_OFFSET,
             self.convert_grid_to_px(y) + GRID_Y_OFFSET,
@@ -225,10 +246,10 @@ class Board(object):
         """Convert grid coordinates to world pixels"""
         return (grid_pos * GRID_SIZE) + SPRITE_OFFSET
 
-    def shift_blocks_down(self):
+    def shift_blocks_down(self) -> None:
         """Move all blocks down to fill empty space"""
         for x in range(BOARD_WIDTH):
-            moved = True
+            moved: bool = True
             # keep looping until no more swaps have been made
             while moved:
                 moved = False
@@ -242,7 +263,7 @@ class Board(object):
                         )
                         moved = True
 
-    def gen_next_column(self):
+    def gen_next_column(self) -> None:
         """Generate a new column of blocks"""
         for y in range(BOARD_HEIGHT):
             # every level decrease the odds of a bomb spawning
@@ -254,11 +275,11 @@ class Board(object):
 
         self.shift_blocks_left()
 
-    def shift_blocks_left(self):
+    def shift_blocks_left(self) -> None:
         """Shift every column left 1 grid space"""
 
         # find furthest right empty column
-        last_empty_col = 0
+        last_empty_col: int = 0
         for x in range(BOARD_WIDTH - 1, 0, -1):
             if not self.board[BOARD_HEIGHT - 1][x]:
                 last_empty_col = x

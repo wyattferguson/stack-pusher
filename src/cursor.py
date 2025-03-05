@@ -17,25 +17,25 @@ class Cursor:
         self,
         x: int = 0,
         y: int = 0,
-    ):
-        self.x = x
-        self.y = y
-        self._sprite = CURSOR_SPRITE
-        self.frame = 0
-        self.selected = False
+    ) -> None:
+        self.x: int = x
+        self.y: int = y
+        self._sprite: Pt = CURSOR_SPRITE
+        self.frame: int = 0
+        self.selected: bool | Pt = False
 
     @property
     def sprite(self) -> Pt:
         """Convert Cursor to Pt object"""
         return Pt(self._sprite.x + self.frame, self._sprite.y)
 
-    def update(self):
+    def update(self) -> None:
         """Update cursor animation every frame"""
         if px.frame_count % ANIMATION_DELAY == 0:
             self.frame = SPRITE_SIZE if self.frame == 0 else 0
         self.input()
 
-    def input(self):
+    def input(self) -> None:
         """Read Keyboard / Gamepad Input"""
         if px.btn(px.KEY_W) or px.btn(px.GAMEPAD1_BUTTON_DPAD_UP):
             if self.y > 0:

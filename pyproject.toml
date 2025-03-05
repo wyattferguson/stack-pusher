@@ -1,10 +1,62 @@
 [project]
 name = "stack-pusher"
-version = "0.1.0"
+version = "0.1.1"
 description = "A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future."
-license = "MIT"
+license = {text = "MIT License"}
+keywords = ["game", "ores", "pyxel", "flashgame", "python"]
 readme = "README.md"
+authors = [
+    { name = "wyattferguson", email = "wyattf@gmail.com" }
+]
 requires-python = ">=3.12"
 dependencies = [
     "pyxel>=2.2.10",
 ]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python",
+    "Topic :: Games/Entertainment",
+    "License :: OSI Approved :: MIT License"
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.4",
+    "ruff>=0.9.7",
+    "taskipy>=1.14.1",
+]
+
+[project.urls]
+homepage = "https://github.com/wyattferguson/stack-pusher"
+repository = "https://github.com/wyattferguson/stack-pusher.git"
+documentation = "https://github.com/wyattferguson/stack-pusher"
+issues = "https://github.com/wyattferguson/stack-pusher/issues"
+
+[tool.taskipy.tasks]
+format = "ruff format ./src/"
+lint = "ruff check --fix ./src/ && mypy ./src/"
+typecheck = "mypy ./src/"
+run = "uv run ./src/stack_pusher.py"
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+format.indent-style = "space"
+target-version = "py312"
+unfixable = ["F401"] # Disable fix for unused imports
+src = ["src"]
+
+[tool.mypy]
+packages = ["src"]
+python_version = "3.12"
+disable_error_code = 'import-untyped'
+implicit_reexport = false
+show_error_codes = true
+warn_return_any = false
+strict = true
