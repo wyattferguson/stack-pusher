@@ -36,7 +36,7 @@ uv venv
 # install all the cool dependancies
 uv sync
 
-# run tch
+# run game
 task run
 ```
 
