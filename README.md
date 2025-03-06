@@ -4,11 +4,9 @@
 
 A remake of the classic flash game ores with Pyxels. This project is basically a rough demo, that I would like to port to the Gameboy in the near future.
 
-[Play in your browser](https://wyattferguson.github.io/)
-
-## Gameplay
-
 Stop the blocks from being pushed of the screen! Destroy touching blocks of the same color to earn points towards leveling up. When you level up the screen restarts, but gets tougher every level. If the blocks go off the left side of the screen you lose.
+
+[Play in your browser](https://wyattferguson.github.io/)
 
 ## Controls
 
@@ -54,7 +52,7 @@ task format
 - Pyxel ([https://github.com/kitao/pyxel](https://github.com/kitao/pyxel))
 - Orignal Ores Gameplay ([https://www.youtube.com/watch?v=vVu9ROoBZKQ](https://www.youtube.com/watch?v=vVu9ROoBZKQ))
 
-## :postbox: Contact & Support
+## Contact & Support
 
 Created by [Wyatt Ferguson](https://wyattf.bsky.social)
 
