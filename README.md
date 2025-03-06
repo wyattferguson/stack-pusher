@@ -1,4 +1,4 @@
-![StackPusher](https://i.imgur.com/XiIlH8s.gif)
+![StackPusher](https://i.imgur.com/kKjIvCo.gif)
 
 # :joystick: Stack Pusher
 
