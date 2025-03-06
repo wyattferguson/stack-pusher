@@ -71,7 +71,7 @@ class StackPusher:
         px.cls(px.COLOR_BLACK)
         if self.state == States.MENU:
             px.bltm(0, 0, TILEMAP_MENU, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-            self.draw_menu()
+            self.main_menu_screen()
         elif self.state == States.PLAYING:
             self.board.draw()
         elif self.state == States.PAUSED:
@@ -79,7 +79,7 @@ class StackPusher:
         else:
             self.game_over_screen()
 
-    def draw_menu(self) -> None:
+    def main_menu_screen(self) -> None:
         """Display main menu text on start up"""
         display_notice("STACK PUSHER", y_offset=-50)
         px.text(
