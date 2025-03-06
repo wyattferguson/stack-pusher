@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 import pyxel as px
 
@@ -14,6 +15,15 @@ class Pt:
         if not isinstance(other, Pt):
             return False
         return self.x == other.x and self.y == other.y
+
+
+class States(Enum):
+    """All possible game states"""
+
+    MENU = 0
+    PLAYING = 1
+    GAMEOVER = 2
+    PAUSED = 3
 
 
 # Gameplay Settings
@@ -41,11 +51,6 @@ NAV_Y_OFFSET = 7
 # Colors
 COL_NAV = px.COLOR_RED
 TRANSPARENCY = 0
-
-# Game States
-STATE_MENU = 0
-STATE_PLAYING = 1
-STATE_GAMEOVER = 3
 
 # Graphics
 SPRITE_SIZE = 8

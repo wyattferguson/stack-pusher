@@ -41,6 +41,12 @@ task run
 
 # build html version
 task build
+
+# lint source
+task lint
+
+# format source with ruff
+task format
 ```
 
 ## References

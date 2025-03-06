@@ -1,7 +1,6 @@
 import random
 
 import pyxel as px
-
 from config import (
     BLOCK_BOMB,
     BLOCK_GREEN,
@@ -31,13 +30,11 @@ from config import (
     Pt,
 )
 from cursor import Cursor
-from text import display_notice
 from timer import Timer
 
 
 class Board:
     def __init__(self) -> None:
-        self.running: bool = True
         self.game_over: bool = False
         self.cursor = Cursor()
         self.score: int = 0
@@ -45,7 +42,7 @@ class Board:
         self.timer = Timer(TIMER_LENGTH)
         self.level: int = 0
         self.board: list[list[Pt | bool]] = []
-        self.block_types = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
+        self.block_types: list[Pt] = [BLOCK_PINK, BLOCK_GREEN, BLOCK_YELLOW, BLOCK_PURPLE]
         self.next_level()
 
     def next_level(self) -> None:
@@ -57,7 +54,7 @@ class Board:
         self.timer.reset()
 
         # increase number of starting columns every 5 levels
-        starting_cols = STARTING_COLS + (self.level // 5)
+        starting_cols: int = STARTING_COLS + (self.level // 5)
         if starting_cols > 10:
             starting_cols = 10
 
@@ -68,29 +65,24 @@ class Board:
 
     def update(self) -> None:
         """Update game state every frame"""
-        if self.running and not self.game_over:
-            self.cursor.update()
-            self.timer.update()
+        self.cursor.update()
+        self.timer.update()
 
-            if self.cursor.selected:
-                if self.board[self.cursor.y][self.cursor.x] == BLOCK_BOMB:
-                    self.trigger_bomb(self.cursor.x)
-                else:
-                    self.clear_block_group(self.cursor.x, self.cursor.y)
-                    self.shift_blocks_down()
+        if self.cursor.selected:
+            if self.board[self.cursor.y][self.cursor.x] == BLOCK_BOMB:
+                self.trigger_bomb(self.cursor.x)
+            else:
+                self.clear_block_group(self.cursor.x, self.cursor.y)
+                self.shift_blocks_down()
 
-            if self.timer.is_action():
-                self.gen_next_column()
+        if self.timer.is_action():
+            self.gen_next_column()
 
         self.input()
 
     def draw(self) -> None:
         """Draw game state every frame"""
         px.bltm(0, 0, TILEMAP_GAME, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-
-        if self.game_over:
-            self.game_over_screen()
-            return
 
         # draw all board pieces
         for y in range(BOARD_HEIGHT):
@@ -100,9 +92,6 @@ class Board:
 
         self.draw_tile(self.cursor.x, self.cursor.y, self.cursor.sprite)
         self.draw_nav()
-
-        if not self.running:
-            self.pause_screen()
 
     def draw_nav(self) -> None:
         """Draw topbar with timer and level progress"""
@@ -143,12 +132,8 @@ class Board:
 
     def input(self) -> None:
         """Get Keyboard / Gamepad Input"""
-        # pause / unpause game
-        if px.btn(px.KEY_P) or px.btn(px.GAMEPAD1_BUTTON_START):
-            self.running = not self.running
-
         # trigger next wave of blocks
-        elif px.btnr(px.KEY_F):
+        if px.btnr(px.KEY_F):
             self.gen_next_column()
             self.timer.reset()
 
@@ -158,15 +143,6 @@ class Board:
             if bomb_x + x >= 0:
                 for y in range(BOARD_HEIGHT):
                     self.board[y][bomb_x + x] = False
-
-    def game_over_screen(self) -> None:
-        """Overlay game over message on screen"""
-        px.cls(px.COLOR_BLACK)
-        display_notice("GAME OVER")
-
-    def pause_screen(self) -> None:
-        """Overlay pause message on screen"""
-        display_notice("PAUSED")
 
     def clear_block_group(self, grid_x: int = 0, grid_y: int = 0) -> None:
         """Delete touching blocks of same selected color"""
@@ -296,3 +272,6 @@ class Board:
                     else:
                         self.board[y][x] = self.board[y][x + 1]
                         self.board[y][x + 1] = False
+
+    def is_game_over(self) -> bool:
+        return self.game_over

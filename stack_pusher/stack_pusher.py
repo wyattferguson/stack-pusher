@@ -3,11 +3,10 @@
 # desc: A python remake of the flash game Ores
 # site: https://wyattferguson.github.io/
 # license: MIT
-# version: 1.0
+# version: 0.1.1
 
 
 import pyxel as px
-
 from board import Board
 from config import (
     COL_NAV,
@@ -15,9 +14,8 @@ from config import (
     FPS,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
-    STATE_MENU,
-    STATE_PLAYING,
     TILEMAP_MENU,
+    States,
 )
 from text import display_notice
 
@@ -35,38 +33,51 @@ class StackPusher:
         )
         px.load("assets.pyxres")
         self.board = Board()
-        self.state = STATE_MENU
+        self.state = States.MENU
         px.run(self.update, self.draw)
 
     def update(self) -> None:
         """Update game state every frame"""
         self.keyboard()
-        if self.state == STATE_PLAYING:
+
+        if self.board.is_game_over():
+            self.state = States.GAMEOVER
+        elif self.state == States.PLAYING:
             self.board.update()
 
     def new_game(self) -> None:
         """Full game restart"""
         self.board = Board()
+        self.state = States.PLAYING
 
     def keyboard(self) -> None:
         """Watch keyboard for Enter/Space and R(Reset)"""
-        if self.state == STATE_MENU:
-            if px.btn(px.KEY_RETURN) or px.btn(px.KEY_SPACE) or px.btn(px.GAMEPAD1_BUTTON_START):
-                self.state = STATE_PLAYING
+
+        # Start game on (Enter/Space)
+        if px.btn(px.KEY_RETURN) or px.btn(px.KEY_SPACE) or px.btn(px.GAMEPAD1_BUTTON_START):
+            if self.state == States.MENU:
                 self.new_game()
 
         # Reset game on (R)
         elif px.btn(px.KEY_R):
             self.new_game()
 
+        # pause / unpause game
+        elif px.btn(px.KEY_P) or px.btn(px.GAMEPAD1_BUTTON_START):
+            self.state = States.PAUSED if self.state == States.PLAYING else States.PLAYING
+
     def draw(self) -> None:
         """Redraw game board and sprites"""
         px.cls(px.COLOR_BLACK)
-        if self.state == STATE_MENU:
+        if self.state == States.MENU:
             px.bltm(0, 0, TILEMAP_MENU, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
             self.draw_menu()
-        elif self.state == STATE_PLAYING:
+        elif self.state == States.PLAYING:
             self.board.draw()
+        elif self.state == States.PAUSED:
+            self.pause_screen()
+        else:
+            self.game_over_screen()
 
     def draw_menu(self) -> None:
         """Display main menu text on start up"""
@@ -84,6 +95,14 @@ class StackPusher:
             COL_NAV,
             font=None,
         )
+
+    def pause_screen(self) -> None:
+        """Overlay pause message on screen"""
+        display_notice("PAUSED")
+
+    def game_over_screen(self) -> None:
+        """Overlay game over message on screen"""
+        display_notice("GAME OVER")
 
 
 if __name__ == "__main__":
