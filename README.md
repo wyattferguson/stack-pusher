@@ -1,4 +1,4 @@
-![ores](https://i.imgur.com/TV05DzJ.png)
+![StackPusher](https://i.imgur.com/XiIlH8s.gif)
 
 # :joystick: Stack Pusher
 
