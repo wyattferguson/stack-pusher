@@ -6,7 +6,7 @@ A remake of the classic flash game ores with Pyxels. This project is basically a
 
 Stop the blocks from being pushed of the screen! Destroy touching blocks of the same color to earn points towards leveling up. When you level up the screen restarts, but gets tougher every level. If the blocks go off the left side of the screen you lose.
 
-[Play in your browser](https://wyattferguson.github.io/)
+:rocket: [Play in your browser](https://wyattferguson.github.io/)
 
 ## Controls
 
